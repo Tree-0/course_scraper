@@ -3,6 +3,7 @@ course_scraper.py
 Scrape the data of NU course catalog information and use it to plan future class schedules. 
 '''
 
+import re
 import requests
 from bs4 import BeautifulSoup
 import course
@@ -25,7 +26,7 @@ cs_course_table = cs_soup.find(id='course_list')
 cs_course_rows = cs_course_table.find_all('tr')
 
 # get labels from table
-headers = [th.text for th in cs_course_rows[0].find_all('th')]
+headers = [th.text.lower() for th in cs_course_rows[0].find_all('th')]
 
 print(headers)
 
@@ -33,11 +34,22 @@ print(headers)
 courses = {}
 
 # sort through the data and parse it into course objects
-for i,row in enumerate(cs_course_rows[1::]):
-    course_data = [td.text for td in row.find_all('td')]
-    print(course_data)
+for row in cs_course_rows[1::]:
 
-    curr_course = course.Course(course_data[0], course_data[1])
-    break
+    # get data from every cell in the row
+    course_data = [td for td in row.find_all('td')]
+    #print(course_data)
+    #print('\n')
 
+    # assign course_id and name
+    curr_course = course.Course(course_data[0].text, course_data[1].text)
+    courses[curr_course.course_id] = curr_course
 
+    print(curr_course.course_id + " " + curr_course.title)
+    #print('\n')
+
+    # parse cells containing course times
+    for i in range(2, len(course_data)):
+        curr_course.parse(course_data[i], headers, i)
+
+    print('\n')
