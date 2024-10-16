@@ -13,6 +13,7 @@ class Course:
     def __init__(self, course_id: str, title: str):
         self.course_id = course_id  # e.g. COMP_SCI 150
         self.title = title  # e.g. Intro to Computer Science
+        self.year = -1 # course year
 
         # Classes are offered in specific quarters with days and times
         # Default: no classes scheduled for any quarter
@@ -57,15 +58,53 @@ class Course:
         '''
         Given the scraped html data for the row parse it into quarters, days, and times...
         '''
-        text_parts = list(html.stripped_strings)
+        html_stripped = html.stripped_strings
+        text_parts = list(html_stripped)
+        # print(text_parts)
+
         if not text_parts:
             print(f'{column_headers[index]}: class not offered')
         else:
-            # regex to find the times the courses are offered
-            times= re.findall(r'\b\d{1,2}(?::\d{2})?-\d{1,2}(?::\d{2})?\b', text_parts[0])
+            # regex to find the times the course is offered
+            time_pattern = r'\b\d{1,2}(?::\d{2})?-\d{1,2}(?::\d{2})?\b'
+            times = re.findall(time_pattern, text_parts[0])
+
+            # regex to find the days the course is offered
+            day_pattern = r'(Th|Tu|T|M|W|F)'
+            days = re.findall(day_pattern, text_parts[0])
+
+            # if class has a lab section, the html will have a third text part
+            # lab_times = None
+            # lab_day = None
+            # if len(text_parts) == 3:
+            #     lab_times = re.findall(time_pattern, text_parts[2])
+            #     lab_day = re.findall(day_pattern, text_parts[2])
+
+            # print
             print(column_headers[index] +": ", end='')
-            print(times)
+            
+            if not times:
+                print('No times specified. ', end='')
+            else:
+                print(times, end='')
+            # if lab_times:
+            #     print(lab_times, end='')
+            
+            if not days:
+                print('No days specified. ', end='')
+            else:
+                print(days, end='')
+            # if lab_day:
+            #     print(lab_day, end='')
 
-            # find the corresponding days 
+            print()
 
-            # find the corresponding quarters
+            # find the corresponding quarter and year
+            quarter_year_split = column_headers[index].split(' ')
+            quarter = quarter_year_split[0].lower()
+            year = quarter_year_split[1].lower()
+            
+            # add all data to course object
+            self.year = year
+            
+
