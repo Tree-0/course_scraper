@@ -44,11 +44,13 @@ for row in cs_course_rows[1::]:
     # add the current course to the dictionary
     courses[curr_course.course_id] = curr_course
 
-    print(curr_course.course_id + " " + curr_course.title)
+    #print(curr_course.course_id + " " + curr_course.title)
 
     # parse cells containing course times
     for i in range(2, len(course_data)):
-        curr_course.parse(course_data[i], headers, i)
+        curr_course.parse_cell(course_data[i], headers, i)
+
+    print(curr_course)
     
 
     print('\n')

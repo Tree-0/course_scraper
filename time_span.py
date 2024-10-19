@@ -108,7 +108,27 @@ class TimeSpan:
         # if the span goes across noon, the end time must be adjusted 
         if self.start_hour < 12 and self.end_hour < 12 and self.end_hour < self.start_hour:
             self.end_hour += 12
+    
+    def to_12_hour(self):
+        '''
+        Convert the time span back to 12-hour time. 
+        '''
+        if self.start_hour > 12:
+            self.start_hour -= 12
+        if self.end_hour > 12:
+            self.end_hour -= 12
 
-    def print_raw(self):
-        print(f'{self.start_hour}:{self.start_minute} - {self.end_hour}:{self.end_minute}')
+    @staticmethod
+    def str_12_hour(hour:int):
+        '''
+        Convert the hour to 12-hour time. 
+        '''
+        if hour == 0:
+            return 12
+        if hour > 12:
+            return hour - 12
+        return hour
+
+    def __str__(self):
+        return f'{self.str_12_hour(self.start_hour)}:{self.start_minute:02d} - {self.str_12_hour(self.end_hour)}:{self.end_minute:02d}'
         

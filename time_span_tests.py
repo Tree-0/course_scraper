@@ -4,14 +4,14 @@ def test_make_time_span():
     manual_span_1 = TimeSpan(0, 0, 0, 0)
     manual_span_2 = TimeSpan(6, 30, 8, 0) 
     print("span_1: ", end='')
-    manual_span_1.print_raw()
+    print(manual_span_1.__str__())
 
     print("span_2: ", end='')
-    manual_span_2.print_raw()
+    print(manual_span_2.__str__())
 
     manual_span_2.to_military()
     print("span_2 to military: ", end='')
-    manual_span_2.print_raw()
+    print(manual_span_2.__str__())
 
 def invalid_time_span():
     try:
@@ -19,15 +19,15 @@ def invalid_time_span():
     except:
         print('validation error caught')
         bad_time = TimeSpan(10, 0, 13, 15)
-    bad_time.print_raw()
+    print(bad_time.__str__())
     bad_time.to_military()
-    bad_time.print_raw()
+    print(bad_time.__str__())
 
 def parsing_test():
     timestr = "9:30-11"
     time = TimeSpan()
     time.parse_time(timestr)
-    time.print_raw()
+    print(time.__str__())
 
     timestr = "7:00-123"
     time = TimeSpan()
@@ -35,7 +35,7 @@ def parsing_test():
         time.parse_time(timestr)
     except:
         print('validation error caught, 123 > 23')
-    time.print_raw()
+    print(time.__str__())
 
     
 if __name__ == "__main__":
